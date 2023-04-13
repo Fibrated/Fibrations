@@ -1,0 +1,15 @@
+﻿@inherits LayoutComponentBase
+
+<div class="d-flex flex-column min-vh-100">
+    <header>
+        <NavMenu />
+    </header>
+    <main class="container my-4 flex-grow-1">
+        @Body
+    </main>
+    <footer class="bg-light py-3 mt-auto">
+        <div class="container">
+            <p class="text-center">&copy; Fibrated.com @DateTime.Now.Year. All rights reserved.</p>
+        </div>
+    </footer>
+</div>

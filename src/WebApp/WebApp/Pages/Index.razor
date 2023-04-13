@@ -1,0 +1,61 @@
+﻿@page "/"
+
+<MudThemeProvider/>
+<MudHidden @bind-Breakpoint="_breakpoint" />
+
+<MudContainer>
+    <MudAppBar Class="appbar mb-5">
+        <MudText Typo="Typo.h6">Fibrated.com</MudText>
+    </MudAppBar>
+
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="pa-4 card">
+                <MudText Typo="Typo.h4">Welcome to Fibrated.com</MudText>
+                <MudText>
+                    This is a sample website built with Blazor Server and MudBlazor. Here, you can find cool tools and projects.
+                </MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudCard Class="card">
+                <MudCardHeader Class="card-header">
+                    <MudCardHeaderContent>
+                        <MudText Typo="Typo.h5">Tool 1</MudText>
+                    </MudCardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="card-content">
+                    <MudText>
+                        Description of the first cool tool.
+                    </MudText>
+                </MudCardContent>
+                <MudCardActions Class="card-actions">
+                    <MudButton Link="tool1">Go to Tool 1</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudCard Class="card">
+                <MudCardHeader Class="card-header">
+                    <MudCardHeaderContent>
+                        <MudText Typo="Typo.h5">Project 1</MudText>
+                    </MudCardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="card-content">
+                    <MudText>
+                        Description of the first amazing project.
+                    </MudText>
+                </MudCardContent>
+                <MudCardActions Class="card-actions">
+                    <MudButton Link="project1">Go to Project 1</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private Breakpoint _breakpoint;
+}
