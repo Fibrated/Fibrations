@@ -1,27 +1,85 @@
 ﻿@page "/"
+@using System.ComponentModel.DataAnnotations;
+@using WebApp.Models;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@using Microsoft.AspNetCore.Components
 
 <MudThemeProvider />
 <MudHidden @bind-Breakpoint="_breakpoint" />
 
 <MudContainer>
+
     <MudAppBar Class="appbar mb-5">
         <MudText Typo="Typo.h6">Fibrated.com</MudText>
     </MudAppBar>
 
-    <div class="banner">
-        <div class="banner-content">
-            <MudText Typo="Typo.h2" Class="mb-4">Welcome to Fibrated.com</MudText>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large" Href="/explore"> @*TODO Can't get explore to load*@
-                Explore Tools and Projects
-            </MudButton>
+    <form @onsubmit="AddMarker">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" @bind="userInput.Name" required />
         </div>
-    </div>
+        <div class="form-group">
+            <label for="latitude">Latitude:</label>
+            <input type="number" class="form-control" id="latitude" @bind="userInput.Latitude" required />
+        </div>
+        <div class="form-group">
+            <label for="longitude">Longitude:</label>
+            <input type="number" class="form-control" id="longitude" @bind="userInput.Longitude" required />
+        </div>
+        <div class="form-group">
+            <label for="icon">Choose an icon:</label>
+            <input type="file" class="form-control-file" id="icon" @onchange="LoadImage" accept="image/*" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 
-    <MudGrid>
-        <!-- Add your cards and other content here -->
-    </MudGrid>
+
+    <div class="map-container">
+        <div id="map" @ref="mapElement"></div>
+    </div>
 </MudContainer>
 
+
+
 @code {
-    private Breakpoint _breakpoint;
+    public ElementReference mapElement;
+    public Breakpoint _breakpoint;
+    public UserInput userInput { get; set; } = new UserInput();
+    public string UserIcon { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeMap", mapElement);
+        }
+    }
+            
+    public async Task AddMarker()
+    {
+        await JSRuntime.InvokeVoidAsync("addMarker", userInput.Name, userInput.Latitude, userInput.Longitude, UserIcon);
+    }
+
+    public async Task LoadImage(ChangeEventArgs e)
+    {
+        var files = e.Value as IReadOnlyList<IBrowserFile>;
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            var allowedExtensions = new[] { "image/png", "image/jpeg" };
+            if (!allowedExtensions.Contains(file.ContentType, StringComparer.OrdinalIgnoreCase))
+            {
+                // Show an error message to the user
+                Console.WriteLine("Only PNG and JPEG images are allowed.");
+                return;
+            }
+
+            var format = file.ContentType;
+            var imageFile = await file.RequestImageFileAsync(format, 64, 64);
+            var buffer = new byte[imageFile.Size];
+            await imageFile.OpenReadStream().ReadAsync(buffer);
+            UserIcon = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        }
+    }
 }

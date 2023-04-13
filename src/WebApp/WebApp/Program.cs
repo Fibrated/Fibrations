@@ -1,11 +1,17 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddMudServices(); // Add this line
+builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
+// Add other services as needed.
 
 var app = builder.Build();
 
@@ -22,11 +28,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+app.MapControllers();
 app.MapRazorPages();
 
 app.Run();
