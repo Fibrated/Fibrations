@@ -1,6 +1,6 @@
 ﻿@page "/"
 
-<MudThemeProvider/>
+<MudThemeProvider />
 <MudHidden @bind-Breakpoint="_breakpoint" />
 
 <MudContainer>
@@ -8,51 +8,17 @@
         <MudText Typo="Typo.h6">Fibrated.com</MudText>
     </MudAppBar>
 
+    <div class="banner">
+        <div class="banner-content">
+            <MudText Typo="Typo.h2" Class="mb-4">Welcome to Fibrated.com</MudText>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large" Href="/explore"> @*TODO Can't get explore to load*@
+                Explore Tools and Projects
+            </MudButton>
+        </div>
+    </div>
+
     <MudGrid>
-        <MudItem xs="12">
-            <MudPaper Class="pa-4 card">
-                <MudText Typo="Typo.h4">Welcome to Fibrated.com</MudText>
-                <MudText>
-                    This is a sample website built with Blazor Server and MudBlazor. Here, you can find cool tools and projects.
-                </MudText>
-            </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="4" lg="3">
-            <MudCard Class="card">
-                <MudCardHeader Class="card-header">
-                    <MudCardHeaderContent>
-                        <MudText Typo="Typo.h5">Tool 1</MudText>
-                    </MudCardHeaderContent>
-                </MudCardHeader>
-                <MudCardContent Class="card-content">
-                    <MudText>
-                        Description of the first cool tool.
-                    </MudText>
-                </MudCardContent>
-                <MudCardActions Class="card-actions">
-                    <MudButton Link="tool1">Go to Tool 1</MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="4" lg="3">
-            <MudCard Class="card">
-                <MudCardHeader Class="card-header">
-                    <MudCardHeaderContent>
-                        <MudText Typo="Typo.h5">Project 1</MudText>
-                    </MudCardHeaderContent>
-                </MudCardHeader>
-                <MudCardContent Class="card-content">
-                    <MudText>
-                        Description of the first amazing project.
-                    </MudText>
-                </MudCardContent>
-                <MudCardActions Class="card-actions">
-                    <MudButton Link="project1">Go to Project 1</MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
+        <!-- Add your cards and other content here -->
     </MudGrid>
 </MudContainer>
 

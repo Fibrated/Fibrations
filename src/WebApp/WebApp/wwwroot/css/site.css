@@ -67,4 +67,42 @@ body {
 .card-actions {
     padding: 1rem;
 }
+.banner {
+    background-image: url('../images/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
 
+    .banner::before {
+        content: "";
+        background-color: rgba(0, 0, 0, 0.6);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

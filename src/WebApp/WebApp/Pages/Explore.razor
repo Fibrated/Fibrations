@@ -1,0 +1,54 @@
+﻿@page "/explore"
+
+<MudThemeProvider />
+<MudHidden @bind-Breakpoint="_breakpoint" />
+
+<MudContainer>
+    <MudAppBar Class="appbar mb-5">
+        <MudText Typo="Typo.h6">Fibrated.com</MudText>
+    </MudAppBar>
+
+    <MudText Typo="Typo.h4" Class="mb-4">Explore Tools and Projects</MudText>
+
+    <MudGrid>
+        @foreach (var item in items)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3">
+                <MudCard Class="card">
+                    <MudCardMedia>
+                        <MudImg Src="@item.ImageUrl" />
+                    </MudCardMedia>
+                    <MudCardHeader Class="card-header">
+                        <MudCardHeaderContent>
+                            <MudText Typo="Typo.h5">@item.Title</MudText>
+                        </MudCardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Class="card-content">
+                        <MudText>@item.Description</MudText>
+                    </MudCardContent>
+                    <MudCardActions Class="card-actions">
+                        <MudButton Link="@item.Link">Learn More</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private Breakpoint _breakpoint;
+    private List<Item> items = new List<Item>
+    {
+        new Item { Title = "GM Tool", ImageUrl = "https://via.placeholder.com/150", Description = "Description of the first cool tool.", Link = "tool1" },
+        new Item { Title = "Blahblahblah", ImageUrl = "https://via.placeholder.com/150", Description = "Description of the first amazing project.", Link = "project1" },
+        // Add more items here
+    };
+
+    public class Item
+    {
+        public string Title { get; set; }
+        public string ImageUrl { get; set; }
+        public string Description { get; set; }
+        public string Link { get; set; }
+    }
+}
