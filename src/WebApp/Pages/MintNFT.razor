@@ -1,0 +1,69 @@
+﻿@page "/mintnft"
+@using FiberNest.Services
+@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations;
+@inject NFTService NFTServiceInstance
+
+<h3>Mint a new NFT</h3>
+
+<div class="card">
+    <div class="card-body">
+        <EditForm Model="MintNFTModelInstance" OnValidSubmit="MintNFTAsync">
+
+            <DataAnnotationsValidator />
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="toAddress">To Address:</label>
+                    <InputText id="toAddress" @bind-Value="MintNFTModelInstance.ToAddress" class="form-control" />
+                    <ValidationMessage For="@(() => MintNFTModelInstance.ToAddress)" />
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <label for="tokenURI">Token URI:</label>
+                    <InputText id="tokenURI" @bind-Value="MintNFTModelInstance.TokenURI" class="form-control" />
+                    <ValidationMessage For="@(() => MintNFTModelInstance.TokenURI)" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Mint NFT</button>
+        </EditForm>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(TransactionHash))
+{
+    <div class="alert alert-success mt-3" role="alert">
+        <p>Transaction hash: @TransactionHash</p>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @ErrorMessage
+    </div>
+}
+
+@code {
+    private MintNFTModel MintNFTModelInstance { get; set; } = new MintNFTModel();
+    private string TransactionHash { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private async void MintNFTAsync()
+    {
+        await NFTServiceInstance.MintNFTAsync(MintNFTModelInstance.ToAddress, MintNFTModelInstance.TokenURI);
+        MintNFTModelInstance = new MintNFTModel();
+    }
+
+    public class MintNFTModel
+    {
+        [Required(ErrorMessage = "To Address is required")]
+        [StringLength(42, ErrorMessage = "To Address must be 42 characters long", MinimumLength = 42)]
+        public string ToAddress { get; set; }
+
+        [Required(ErrorMessage = "Token URI is required")]
+        [Url(ErrorMessage = "Token URI must be a valid URL")]
+        public string TokenURI { get; set; }
+    }
+}
