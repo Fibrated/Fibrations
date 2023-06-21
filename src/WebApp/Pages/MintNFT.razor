@@ -1,49 +1,47 @@
-﻿@page "/mintnft"
+﻿@page "/"
 @using FiberNest.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations;
 @inject NFTService NFTServiceInstance
 
-<h3>Mint a new NFT</h3>
+<h3 class="mb-4">Mint a new NFT</h3>
 
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-body">
         <EditForm Model="MintNFTModelInstance" OnValidSubmit="MintNFTAsync">
-
             <DataAnnotationsValidator />
 
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="toAddress">To Address:</label>
-                    <InputText id="toAddress" @bind-Value="MintNFTModelInstance.ToAddress" class="form-control" />
-                    <ValidationMessage For="@(() => MintNFTModelInstance.ToAddress)" />
-                </div>
+            <div class="form-group">
+                <label class="form-label" for="toAddress">To Address:</label>
+                <InputText id="toAddress" @bind-Value="MintNFTModelInstance.ToAddress" class="form-control" />
+                <ValidationMessage For="@(() => MintNFTModelInstance.ToAddress)" />
+            </div>
 
-                <div class="col-md-6 form-group">
-                    <label for="tokenURI">Token URI:</label>
-                    <InputText id="tokenURI" @bind-Value="MintNFTModelInstance.TokenURI" class="form-control" />
-                    <ValidationMessage For="@(() => MintNFTModelInstance.TokenURI)" />
-                </div>
+            <div class="form-group">
+                <label class="form-label" for="tokenURI">Token URI:</label>
+                <InputText id="tokenURI" @bind-Value="MintNFTModelInstance.TokenURI" class="form-control" />
+                <ValidationMessage For="@(() => MintNFTModelInstance.TokenURI)" />
             </div>
 
             <button type="submit" class="btn btn-primary">Mint NFT</button>
+
+            @if (!string.IsNullOrEmpty(TransactionHash))
+            {
+                <div class="alert alert-success mt-4" role="alert">
+                    <p class="mb-0">Transaction hash:</p>
+                    <a href="@($"https://rinkeby.etherscan.io/tx/{TransactionHash}")" target="_blank">@TransactionHash</a>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="alert alert-danger mt-4" role="alert">
+                    @ErrorMessage
+                </div>
+            }
         </EditForm>
     </div>
 </div>
-
-@if (!string.IsNullOrEmpty(TransactionHash))
-{
-    <div class="alert alert-success mt-3" role="alert">
-        <p>Transaction hash: @TransactionHash</p>
-    </div>
-}
-
-@if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <div class="alert alert-danger mt-3" role="alert">
-        @ErrorMessage
-    </div>
-}
 
 @code {
     private MintNFTModel MintNFTModelInstance { get; set; } = new MintNFTModel();
@@ -52,8 +50,17 @@
 
     private async void MintNFTAsync()
     {
-        await NFTServiceInstance.MintNFTAsync(MintNFTModelInstance.ToAddress, MintNFTModelInstance.TokenURI);
-        MintNFTModelInstance = new MintNFTModel();
+        try
+        {
+            TransactionHash = await NFTServiceInstance.MintNFTAsync(MintNFTModelInstance.ToAddress, MintNFTModelInstance.TokenURI);
+            ErrorMessage = null;
+            MintNFTModelInstance = new MintNFTModel();
+        }
+        catch (Exception ex)
+        {
+            TransactionHash = null;
+            ErrorMessage = ex.Message;
+        }
     }
 
     public class MintNFTModel

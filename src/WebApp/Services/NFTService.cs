@@ -20,6 +20,16 @@ namespace FiberNest.Services
 
         public async Task<string> MintNFTAsync(string toAddress, string tokenURI)
         {
+            if (string.IsNullOrEmpty(toAddress))
+            {
+                throw new ArgumentException("To address is required", nameof(toAddress));
+            }
+
+            if (string.IsNullOrEmpty(tokenURI))
+            {
+                throw new ArgumentException("Token URI is required", nameof(tokenURI));
+            }
+
             var mintFunction = new MintFunction
             {
                 To = toAddress,
@@ -45,6 +55,7 @@ namespace FiberNest.Services
 
             return transactionHash;
         }
+
 
         public async Task<string> GetTokenURIAsync(BigInteger tokenId)
         {
